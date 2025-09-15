@@ -147,7 +147,6 @@ header .subtitle {
     opacity: 0.7;
 }
 
-/* --- ADDED: Styles for new button --- */
 #export-btn {
     font-family: 'Roboto', sans-serif;
     font-size: 0.9rem;
@@ -172,10 +171,22 @@ header .subtitle {
 .hidden {
     display: none;
 }
-/* --- End of new styles --- */
 
 footer {
     margin-top: 2rem;
     font-size: 0.8rem;
     opacity: 0.5;
+}
+
+/* Styling for the new 'Find Estimated Prize' link */
+.info-box a {
+    font-size: 1.1rem; /* A bit smaller to fit */
+    font-weight: 700;
+    color: var(--secondary-color);
+    text-decoration: none;
+    transition: opacity 0.2s;
+}
+
+.info-box a:hover {
+    opacity: 0.8;
 }
