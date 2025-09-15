@@ -8,7 +8,6 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
-    <link rel="icon" type="image/jpeg" href="/favicon.jpg">
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
@@ -17,16 +16,20 @@
     <main class="predictor-container">
         <header>
             <h1>Powerball Predictor</h1>
-            <p class="subtitle">Based on historical data patterns from 2010</p>
+            <p class="subtitle">Based on historical data patterns from your file</p>
         </header>
         
         <section class="drawing-info">
             <div class="info-box">
                 <span>Next Estimated Jackpot</span>
-                <strong>$120 Million</strong> </div>
+                <a href="https://www.powerball.com/" target="_blank" rel="noopener noreferrer">
+                    Find Estimated Prize Here
+                </a>
+            </div>
             <div class="info-box">
                 <span>Next Drawing</span>
-                <strong>Mon, Sep 15, 10:59 PM</strong> </div>
+                <strong id="next-drawing">Loading...</strong> 
+            </div>
         </section>
         
         <section class="number-display" id="number-capture-area">
@@ -39,11 +42,10 @@
         </section>
         
         <button id="generate-btn">Generate Winning Numbers</button>
-        
         <button id="export-btn" class="hidden">Save Numbers as Image</button>
         
         <footer>
-            <p>Disclaimer: drawings are random, and while studying patterns from past drawings can help, there is no accurate way to predict winning numbers.</p>
+            <p>Disclaimer: For entertainment purposes only. Drawings are random.</p>
         </footer>
     </main>
     
