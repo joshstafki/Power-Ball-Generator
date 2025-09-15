@@ -8,13 +8,15 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
 <body>
 
     <main class="predictor-container">
         <header>
             <h1>Powerball Predictor</h1>
-            <p class="subtitle">Based on historical data patterns from 2010</p>
+            <p class="subtitle">Based on historical data patterns from your file</p>
         </header>
         
         <section class="drawing-info">
@@ -26,7 +28,7 @@
                 <strong>Wed, Sep 17, 10:59 PM</strong> </div>
         </section>
         
-        <section class="number-display">
+        <section class="number-display" id="number-capture-area">
             <div class="number-ball main-ball" id="ball-0">?</div>
             <div class="number-ball main-ball" id="ball-1">?</div>
             <div class="number-ball main-ball" id="ball-2">?</div>
@@ -36,6 +38,8 @@
         </section>
         
         <button id="generate-btn">Generate Winning Numbers</button>
+        
+        <button id="export-btn" class="hidden">Save Numbers as Image</button>
         
         <footer>
             <p>Disclaimer: For entertainment purposes only. Drawings are random.</p>
