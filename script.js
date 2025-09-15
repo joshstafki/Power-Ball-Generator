@@ -4,6 +4,13 @@ document.addEventListener('DOMContentLoaded', () => {
     function updateNextDrawingDate() {
         const drawingElement = document.getElementById('next-drawing');
         
+        // This is a check. If 'drawingElement' is null, the script will stop.
+        // This would happen if your HTML file is missing id="next-drawing".
+        if (!drawingElement) {
+            console.error("Error: Cannot find element with id='next-drawing'");
+            return;
+        }
+
         const now = new Date();
         const currentDayOfWeek = now.getDay(); // 0 = Sun, 1 = Mon, ..., 6 = Sat
         
@@ -50,17 +57,43 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Weighted Array Creation (Unchanged) ---
     function createWeightedArray(freqObject) {
-        // ... (rest of the function is the same)
+        const weightedArray = [];
+        for (const number in freqObject) {
+            const frequency = freqObject[number];
+            for (let i = 0; i < frequency; i++) {
+                weightedArray.push(parseInt(number));
+            }
+        }
+        return weightedArray;
     }
     const weightedMainNumbers = createWeightedArray(mainNumberFrequencies);
     const weightedPowerballs = createWeightedArray(powerballFrequencies);
 
     // --- Number Generation Logic (Unchanged) ---
     function generateNumbers() {
-        // ... (rest of the function is the same)
+        const mainNumbers = new Set();
+        while (mainNumbers.size < 5) {
+            mainNumbers.add(getRandomWeightedItem(weightedMainNumbers));
+        }
+        
+        const powerball = getRandomWeightedItem(weightedPowerballs);
+        
+        // Sort main numbers for display
+        const sortedMainNumbers = [...mainNumbers].sort((a, b) => a - b);
+        
+        return {
+            main: sortedMainNumbers,
+            pb: powerball
+        };
     }
 
-    // --- DOM Manipulation & Rate Limit Logic (Unchanged) ---
+    function getRandomWeightedItem(array) {
+        const randomIndex = Math.floor(Math.random() * array.length);
+        return array[randomIndex];
+    }
+
+    // --- DOM Manipulation & Rate Limit Logic ---
+    
     const generateButton = document.getElementById('generate-btn');
     const exportButton = document.getElementById('export-btn');
     const numberCaptureArea = document.getElementById('number-capture-area');
@@ -79,26 +112,118 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Rate Limit Functions (Unchanged) ---
     function startCooldown(cooldownEndTime) {
-        // ... (rest of the function is the same)
+        const now = new Date().getTime();
+        const remainingTime = cooldownEndTime - now;
+
+        if (remainingTime > 0) {
+            generateButton.disabled = true;
+            const minutesLeft = Math.ceil(remainingTime / (60 * 1000));
+            generateButton.textContent = `Please wait ${minutesLeft} ${minutesLeft > 1 ? 'minutes' : 'minute'}...`;
+            exportButton.classList.add('hidden');
+            setTimeout(resetButton, remainingTime);
+        } else {
+            resetButton();
+        }
     }
 
     function resetButton() {
-        // ... (rest of the function is the same)
+        generateButton.disabled = false;
+        generateButton.textContent = originalButtonText;
     }
 
     function checkCooldownOnLoad() {
-        // ... (rest of the function is the same)
+        const lastGenTime = localStorage.getItem('lastGenerationTime');
+        if (lastGenTime) {
+            const cooldownEndTime = parseInt(lastGenTime) + oneHour;
+            startCooldown(cooldownEndTime);
+        }
     }
     
-    // --- Generate Button Click Listener (Unchanged) ---
-    generateButton.addEventListener('click', () => {
-        // ... (rest of the function is the same)
-    });
+    // --- Generate Button Click Listener ---
+    // Check if the button was found
+    if (generateButton) {
+        generateButton.addEventListener('click', () => {
+            const now = new Date().getTime();
+            const lastGenTime = localStorage.getItem('lastGenerationTime');
+            
+            if (lastGenTime && (now - parseInt(lastGenTime) < oneHour)) {
+                startCooldown(parseInt(lastGenTime) + oneHour);
+                return;
+            }
+            
+            if(exportButton) exportButton.classList.add('hidden');
+            
+            const allBalls = [...ballElements, pbBallElement];
+            allBalls.forEach(ball => {
+                // This check prevents errors if an ID is wrong
+                if (ball) {
+                    ball.classList.remove('generated');
+                    ball.textContent = '?';
+                } else {
+                    console.error("A 'ball' element is missing. Check your HTML IDs (ball-0 to ball-pb).");
+                }
+            });
 
-    // --- Export Button Listener (Unchanged) ---
-    exportButton.addEventListener('click', () => {
-        // ... (rest of the function is the same)
-    });
+            const { main, pb } = generateNumbers();
+
+            let delay = 0;
+            main.forEach((num, index) => {
+                setTimeout(() => {
+                    const ball = ballElements[index];
+                    if (ball) {
+                        ball.textContent = num;
+                        ball.classList.add('generated');
+                    }
+                }, delay);
+                delay += 200;
+            });
+            
+            setTimeout(() => {
+                if (pbBallElement) {
+                    pbBallElement.textContent = pb;
+                    pbBallElement.classList.add('generated');
+                }
+                if (exportButton) exportButton.classList.remove('hidden');
+            }, delay);
+            
+            localStorage.setItem('lastGenerationTime', now.toString());
+            startCooldown(now + oneHour);
+        });
+    } else {
+        console.error("Error: Cannot find button with id='generate-btn'. The app will not work.");
+    }
+
+    // --- Export Button Listener ---
+    // Check if the export button was found
+    if (exportButton) {
+        exportButton.addEventListener('click', () => {
+            // Check if html2canvas is loaded
+            if (typeof html2canvas === 'undefined') {
+                console.error("Error: html2canvas library is not loaded. Export will not work.");
+                alert("Error: Image export library failed to load.");
+                return;
+            }
+
+            if (numberCaptureArea) {
+                html2canvas(numberCaptureArea, {
+                    backgroundColor: null,
+                    scale: 2
+                }).then(canvas => {
+                    const imageData = canvas.toDataURL('image/png');
+                    const link = document.createElement('a');
+                    link.href = imageData;
+                    link.download = 'powerball-numbers.png';
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                });
+            } else {
+                console.error("Error: Cannot find element with id='number-capture-area'.");
+            }
+        });
+    } else {
+        console.error("Error: Cannot find button with id='export-btn'.");
+    }
 
     // --- Check cooldown status on page load (Unchanged) ---
     checkCooldownOnLoad();
