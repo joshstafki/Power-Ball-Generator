@@ -78,6 +78,8 @@ header .subtitle {
     flex-wrap: wrap;
     gap: 1rem;
     margin-bottom: 2.5rem;
+    /* Added padding for better image capture */
+    padding: 1rem; 
 }
 
 .number-ball {
@@ -122,6 +124,8 @@ header .subtitle {
     cursor: pointer;
     transition: all 0.3s ease;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    width: 100%;
+    box-sizing: border-box; /* Ensures padding doesn't break layout */
 }
 
 #generate-btn:hover {
@@ -134,6 +138,41 @@ header .subtitle {
     transform: translateY(-1px);
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
 }
+
+#generate-btn:disabled {
+    background: #555;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+    opacity: 0.7;
+}
+
+/* --- ADDED: Styles for new button --- */
+#export-btn {
+    font-family: 'Roboto', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text-color);
+    background: transparent;
+    border: 2px solid var(--secondary-color);
+    border-radius: 10px;
+    padding: 0.75rem 1.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 1rem;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+#export-btn:hover {
+    background: var(--secondary-color);
+    color: var(--white-ball-text);
+}
+
+.hidden {
+    display: none;
+}
+/* --- End of new styles --- */
 
 footer {
     margin-top: 2rem;
