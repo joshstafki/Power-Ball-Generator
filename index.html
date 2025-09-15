@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Powerball Number Generator</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <main class="predictor-container">
+        <header>
+            <h1>Powerball Predictor</h1>
+            <p class="subtitle">Based on historical data patterns from 2010</p>
+        </header>
+        
+        <section class="drawing-info">
+            <div class="info-box">
+                <span>Next Estimated Jackpot</span>
+                <strong>$120 Million</strong> </div>
+            <div class="info-box">
+                <span>Next Drawing</span>
+                <strong>Wed, Sep 17, 10:59 PM</strong> </div>
+        </section>
+        
+        <section class="number-display">
+            <div class="number-ball main-ball" id="ball-0">?</div>
+            <div class="number-ball main-ball" id="ball-1">?</div>
+            <div class="number-ball main-ball" id="ball-2">?</div>
+            <div class="number-ball main-ball" id="ball-3">?</div>
+            <div class="number-ball main-ball" id="ball-4">?</div>
+            <div class="number-ball power-ball" id="ball-pb">?</div>
+        </section>
+        
+        <button id="generate-btn">Generate Winning Numbers</button>
+        
+        <footer>
+            <p>Disclaimer: For entertainment purposes only. Drawings are random.</p>
+        </footer>
+    </main>
+    
+    <script src="script.js"></script>
+</body>
+</html>
